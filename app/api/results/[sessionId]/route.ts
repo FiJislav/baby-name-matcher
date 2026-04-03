@@ -13,7 +13,7 @@ export async function GET(
 
   const { data: session } = await db
     .from('sessions')
-    .select('id, submitted_a, submitted_b')
+    .select('id, submitted_a, submitted_b, name_a, name_b')
     .eq('id', sessionId)
     .single()
 
@@ -38,5 +38,5 @@ export async function GET(
 
   const results = computeResults(subA as any, subB as any, (nameRecords ?? []) as NameRecord[])
 
-  return NextResponse.json({ results })
+  return NextResponse.json({ results, nameA: session.name_a, nameB: session.name_b })
 }

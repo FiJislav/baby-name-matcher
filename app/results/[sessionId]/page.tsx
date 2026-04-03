@@ -14,7 +14,7 @@ export default async function ResultsPage({ params }: Props) {
 
   const { data: session } = await db
     .from('sessions')
-    .select('id, submitted_a, submitted_b')
+    .select('id, submitted_a, submitted_b, name_a, name_b, gender_mode')
     .eq('id', sessionId)
     .single()
 
@@ -47,5 +47,12 @@ export default async function ResultsPage({ params }: Props) {
 
   const results = computeResults(subA as any, subB as any, (nameRecords ?? []) as NameRecord[])
 
-  return <ResultsReveal results={results} />
+  return (
+    <ResultsReveal
+      results={results}
+      nameA={session.name_a ?? 'Parent A'}
+      nameB={session.name_b ?? 'Parent B'}
+      genderMode={session.gender_mode ?? 'both'}
+    />
+  )
 }

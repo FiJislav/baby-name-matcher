@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase'
 
 export async function POST(req: NextRequest) {
-  const { inviteCode, label } = await req.json()
+  const { inviteCode, label, nameA, nameB, genderMode } = await req.json()
 
   if (!inviteCode || inviteCode !== process.env.INVITE_CODE) {
     return NextResponse.json({ error: 'Invalid invite code' }, { status: 401 })
@@ -11,7 +11,12 @@ export async function POST(req: NextRequest) {
   const db = createAdminClient()
   const { data, error } = await db
     .from('sessions')
-    .insert({ label: label?.trim() || 'Our family' })
+    .insert({
+      label: label?.trim() || 'Our family',
+      name_a: nameA?.trim() || 'Parent A',
+      name_b: nameB?.trim() || 'Parent B',
+      gender_mode: ['both', 'girls', 'boys'].includes(genderMode) ? genderMode : 'both',
+    })
     .select()
     .single()
 

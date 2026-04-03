@@ -2,7 +2,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NameCard } from './NameCard'
 import { RankedList } from './RankedList'
-import { NameWithPopularity, RankedEntry } from '@/lib/types'
+import { GenderMode, NameWithPopularity, RankedEntry } from '@/lib/types'
 
 const COUNTRIES = [
   { code: '', label: 'All' },
@@ -16,10 +16,11 @@ interface Props {
   token: string
   sessionId: string
   partnerSubmitted: boolean
+  genderMode?: GenderMode
 }
 
-export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPartnerSubmitted }: Props) {
-  const [gender, setGender] = useState<'girl' | 'boy'>('girl')
+export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPartnerSubmitted, genderMode = 'both' }: Props) {
+  const [gender, setGender] = useState<'girl' | 'boy'>(genderMode === 'boys' ? 'boy' : 'girl')
   const [country, setCountry] = useState('')
   const [sortByPop, setSortByPop] = useState(false)
   const [search, setSearch] = useState('')
@@ -35,7 +36,10 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
   const list = gender === 'girl' ? girlList : boyList
   const setList = gender === 'girl' ? setGirlList : setBoyList
   const submitted = gender === 'girl' ? girlSubmitted : boySubmitted
-  const bothSubmitted = girlSubmitted && boySubmitted
+  const allSubmitted =
+    genderMode === 'girls' ? girlSubmitted :
+    genderMode === 'boys'  ? boySubmitted  :
+    girlSubmitted && boySubmitted
 
   const fetchNames = useCallback(async () => {
     const params = new URLSearchParams({ gender })
@@ -97,32 +101,34 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
         <p className="text-gray-400 mt-1 text-sm">Rank your top 10 — then see what you both love</p>
       </div>
 
-      {/* Gender tabs */}
-      <div className="flex gap-3 mb-6 justify-center">
-        {(['girl', 'boy'] as const).map(g => (
-          <button
-            key={g}
-            onClick={() => setGender(g)}
-            className={`px-8 py-3 rounded-full font-semibold text-sm shadow-sm transition-all ${
-              gender === g
-                ? g === 'girl'
-                  ? 'bg-gradient-to-r from-pink-400 to-pink-500 text-white shadow-md scale-105'
-                  : 'bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-md scale-105'
-                : 'bg-white text-gray-500 hover:bg-gray-50 border-2 border-gray-100'
-            }`}
-          >
-            {g === 'girl' ? '👧 Girls' : '👦 Boys'}
-            {g === 'girl' && girlSubmitted && ' ✅'}
-            {g === 'boy' && boySubmitted && ' ✅'}
-          </button>
-        ))}
-      </div>
+      {/* Gender tabs — only shown if both genders are active */}
+      {genderMode === 'both' && (
+        <div className="flex gap-3 mb-6 justify-center">
+          {(['girl', 'boy'] as const).map(g => (
+            <button
+              key={g}
+              onClick={() => setGender(g)}
+              className={`px-8 py-3 rounded-full font-semibold text-sm shadow-sm transition-all ${
+                gender === g
+                  ? g === 'girl'
+                    ? 'bg-gradient-to-r from-pink-400 to-pink-500 text-white shadow-md scale-105'
+                    : 'bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-md scale-105'
+                  : 'bg-white text-gray-500 hover:bg-gray-50 border-2 border-gray-100'
+              }`}
+            >
+              {g === 'girl' ? '👧 Girls' : '👦 Boys'}
+              {g === 'girl' && girlSubmitted && ' ✅'}
+              {g === 'boy' && boySubmitted && ' ✅'}
+            </button>
+          ))}
+        </div>
+      )}
 
       {submitted ? (
         <div className="text-center py-16 bg-white rounded-3xl shadow-sm border-2 border-green-100">
           <div className="text-5xl mb-3">✅</div>
           <p className="text-2xl font-bold text-green-600">{gender === 'girl' ? 'Girls' : 'Boys'} list submitted!</p>
-          {!bothSubmitted && (
+          {!allSubmitted && genderMode === 'both' && (
             <p className="text-gray-400 mt-2">Switch to {gender === 'girl' ? 'boys' : 'girls'} to finish</p>
           )}
         </div>
@@ -212,7 +218,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
         </div>
       )}
 
-      {bothSubmitted && (
+      {allSubmitted && (
         <div className="mt-8 text-center p-8 bg-white rounded-3xl shadow-sm border-2 border-green-100">
           {partnerSubmitted ? (
             <>

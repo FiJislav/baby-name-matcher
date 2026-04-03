@@ -3,9 +3,14 @@
 export type Gender = 'girl' | 'boy' | 'neutral'
 export type ParentSlot = 'a' | 'b'
 
+export type GenderMode = 'both' | 'girls' | 'boys'
+
 export interface Session {
   id: string
   label: string
+  name_a: string
+  name_b: string
+  gender_mode: GenderMode
   due_date: string | null
   submitted_a: boolean
   submitted_b: boolean

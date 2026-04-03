@@ -12,7 +12,7 @@ export default async function PickPage({ params }: Props) {
 
   const { data: session } = await db
     .from('sessions')
-    .select('id, submitted_a, submitted_b, token_a, token_b')
+    .select('id, submitted_a, submitted_b, token_a, token_b, gender_mode')
     .or(`token_a.eq.${token},token_b.eq.${token}`)
     .single()
 
@@ -26,6 +26,7 @@ export default async function PickPage({ params }: Props) {
       token={token}
       sessionId={session.id}
       partnerSubmitted={partnerSubmitted}
+      genderMode={session.gender_mode ?? 'both'}
     />
   )
 }
