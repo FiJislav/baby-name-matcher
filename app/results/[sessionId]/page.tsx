@@ -5,16 +5,17 @@ import { NameRecord } from '@/lib/types'
 import { ResultsReveal } from '@/components/ResultsReveal'
 
 interface Props {
-  params: { sessionId: string }
+  params: Promise<{ sessionId: string }>
 }
 
 export default async function ResultsPage({ params }: Props) {
+  const { sessionId } = await params
   const db = createAdminClient()
 
   const { data: session } = await db
     .from('sessions')
     .select('id, submitted_a, submitted_b')
-    .eq('id', params.sessionId)
+    .eq('id', sessionId)
     .single()
 
   if (!session) notFound()
@@ -33,7 +34,7 @@ export default async function ResultsPage({ params }: Props) {
   const { data: submissions } = await db
     .from('submissions')
     .select('*')
-    .eq('session_id', params.sessionId)
+    .eq('session_id', sessionId)
 
   const subA = (submissions ?? []).filter(s => s.parent_slot === 'a')
   const subB = (submissions ?? []).filter(s => s.parent_slot === 'b')
