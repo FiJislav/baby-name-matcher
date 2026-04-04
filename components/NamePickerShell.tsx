@@ -109,6 +109,8 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
 
   const addedNames = new Set(list.map(e => e.name))
 
+  const shortCode = sessionId.split('-')[0].toUpperCase()
+
   return (
     <div className="min-h-screen p-4 md:p-6 max-w-5xl mx-auto">
       {/* Header */}
@@ -242,6 +244,14 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
           </div>
         </div>
       )}
+
+      {/* Session code pill — bottom-left, non-disruptive */}
+      <a
+        href={`/rejoin/${sessionId}`}
+        className="fixed bottom-4 left-4 flex items-center gap-1.5 bg-white/70 dark:bg-[#1a1428]/70 backdrop-blur-sm border border-gray-200 dark:border-[#352a50] text-gray-400 dark:text-[#7c6d9a] hover:text-gray-600 dark:hover:text-[#c084fc] text-xs font-mono px-3 py-1.5 rounded-full shadow-sm transition-colors"
+      >
+        🔑 {shortCode}
+      </a>
 
       {allSubmitted && (
         <div className="mt-8 text-center p-8 bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-green-100 dark:border-[#1a3a28]">
