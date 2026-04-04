@@ -44,12 +44,18 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
 
   // Tint page background based on active gender
   useEffect(() => {
-    document.body.classList.toggle('gender-girls', gender === 'girl')
-    document.body.classList.toggle('gender-boys', gender === 'boy')
-    return () => {
-      document.body.classList.remove('gender-girls', 'gender-boys')
+    if (genderMode === 'both') {
+      document.body.classList.add('gender-picker-both')
+      document.body.classList.toggle('picker-girls', gender === 'girl')
+      document.body.classList.toggle('picker-boys', gender === 'boy')
+    } else {
+      document.body.classList.toggle('gender-girls', gender === 'girl')
+      document.body.classList.toggle('gender-boys', gender === 'boy')
     }
-  }, [gender])
+    return () => {
+      document.body.classList.remove('gender-girls', 'gender-boys', 'gender-picker-both', 'picker-girls', 'picker-boys')
+    }
+  }, [gender, genderMode])
 
   const fetchNames = useCallback(async () => {
     const params = new URLSearchParams({ gender })

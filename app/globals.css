@@ -13,7 +13,7 @@ body {
   transition: background 0.5s ease;
 }
 
-/* Picker page: solid gender tint */
+/* Picker page: solid gender tint (girls-only / boys-only sessions) */
 body.gender-girls {
   background: linear-gradient(135deg, #ffe4ef 0%, #fff0f8 50%, #ffe4ef 100%);
 }
@@ -21,6 +21,35 @@ body.gender-girls {
 body.gender-boys {
   background: linear-gradient(135deg, #e0f0ff 0%, #f0f4ff 50%, #dbeafe 100%);
 }
+
+/* Picker page: animated split when session is "both" */
+body.gender-picker-both {
+  --gender-split: 50%;
+  background: linear-gradient(90deg,
+    #ffb3cc 0%,
+    #ffd6e4 calc(var(--gender-split) - 15%),
+    #c8deff calc(var(--gender-split) + 15%),
+    #93c5fd 100%
+  );
+  transition: --gender-split 0.8s ease;
+}
+
+body.gender-picker-both.picker-girls { --gender-split: 115%; }
+body.gender-picker-both.picker-boys  { --gender-split: -15%; }
+
+.dark body.gender-picker-both {
+  --gender-split: 50%;
+  background: linear-gradient(90deg,
+    #5c0a22 0%,
+    #3d0a1e calc(var(--gender-split) - 15%),
+    #0a1a3d calc(var(--gender-split) + 15%),
+    #0a1255 100%
+  );
+  transition: --gender-split 0.8s ease;
+}
+
+.dark body.gender-picker-both.picker-girls { --gender-split: 115%; }
+.dark body.gender-picker-both.picker-boys  { --gender-split: -15%; }
 
 /* New session page: sliding gradient based on gender mode selection */
 @property --gender-split {
