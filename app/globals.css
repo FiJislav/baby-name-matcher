@@ -23,26 +23,26 @@ body.gender-boys {
 }
 
 /* New session page: sliding gradient based on gender mode selection */
+@property --gender-split {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 50%;
+}
+
 body.gender-mode-page {
+  --gender-split: 50%;
   background: linear-gradient(90deg,
-    #ffb3cc 0%, #ffe8f2 25%, #e8f0ff 75%, #93c5fd 100%
+    #ffb3cc 0%,
+    #ffd6e4 calc(var(--gender-split) - 15%),
+    #c8deff calc(var(--gender-split) + 15%),
+    #93c5fd 100%
   );
-  background-size: 200% 100%;
-  background-position: 50% 0%;
-  transition: background-position 0.8s ease;
+  transition: --gender-split 0.8s ease;
 }
 
-body.gender-mode-page.mode-girls {
-  background-position: 0% 0%;
-}
-
-body.gender-mode-page.mode-both {
-  background-position: 50% 0%;
-}
-
-body.gender-mode-page.mode-boys {
-  background-position: 100% 0%;
-}
+body.gender-mode-page.mode-girls { --gender-split: 115%; }
+body.gender-mode-page.mode-both  { --gender-split: 50%;  }
+body.gender-mode-page.mode-boys  { --gender-split: -15%; }
 
 .dark body {
   background: linear-gradient(135deg, #0d0d14 0%, #110b1a 50%, #0d1020 100%);
@@ -58,23 +58,23 @@ body.gender-mode-page.mode-boys {
   background: linear-gradient(135deg, #080d1a 0%, #0d1128 50%, #080d1a 100%);
 }
 
+@property --gender-split-dark {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: 50%;
+}
+
 .dark body.gender-mode-page {
+  --gender-split-dark: 50%;
   background: linear-gradient(90deg,
-    #4a0a20 0%, #200d18 25%, #0d1028 75%, #0a1a50 100%
+    #5c0a22 0%,
+    #3d0a1e calc(var(--gender-split-dark) - 15%),
+    #0a1a3d calc(var(--gender-split-dark) + 15%),
+    #0a1255 100%
   );
-  background-size: 200% 100%;
-  background-position: 50% 0%;
-  transition: background-position 0.8s ease;
+  transition: --gender-split-dark 0.8s ease;
 }
 
-.dark body.gender-mode-page.mode-girls {
-  background-position: 0% 0%;
-}
-
-.dark body.gender-mode-page.mode-both {
-  background-position: 50% 0%;
-}
-
-.dark body.gender-mode-page.mode-boys {
-  background-position: 100% 0%;
-}
+.dark body.gender-mode-page.mode-girls { --gender-split-dark: 115%; }
+.dark body.gender-mode-page.mode-both  { --gender-split-dark: 50%;  }
+.dark body.gender-mode-page.mode-boys  { --gender-split-dark: -15%; }
