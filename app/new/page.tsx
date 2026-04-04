@@ -122,6 +122,18 @@ export default function NewSessionPage() {
   const [error, setError] = useState('')
   const [session, setSession] = useState<Session | null>(null)
 
+  useEffect(() => {
+    document.body.classList.add('gender-mode-page')
+    return () => {
+      document.body.classList.remove('gender-mode-page', 'mode-girls', 'mode-both', 'mode-boys')
+    }
+  }, [])
+
+  useEffect(() => {
+    document.body.classList.remove('mode-girls', 'mode-both', 'mode-boys')
+    document.body.classList.add(`mode-${genderMode}`)
+  }, [genderMode])
+
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
     setLoading(true); setError('')

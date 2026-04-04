@@ -13,6 +13,7 @@ body {
   transition: background 0.5s ease;
 }
 
+/* Picker page: solid gender tint */
 body.gender-girls {
   background: linear-gradient(135deg, #ffe4ef 0%, #fff0f8 50%, #ffe4ef 100%);
 }
@@ -21,9 +22,32 @@ body.gender-boys {
   background: linear-gradient(135deg, #e0f0ff 0%, #f0f4ff 50%, #dbeafe 100%);
 }
 
+/* New session page: sliding gradient based on gender mode selection */
+body.gender-mode-page {
+  background: linear-gradient(90deg,
+    #ffe4ef 0%, #fff4f9 20%, #ffffff 50%, #f0f4ff 80%, #dbeafe 100%
+  );
+  background-size: 300% 100%;
+  background-position: 50% 0%;
+  transition: background-position 0.8s ease;
+}
+
+body.gender-mode-page.mode-girls {
+  background-position: 0% 0%;
+}
+
+body.gender-mode-page.mode-both {
+  background-position: 50% 0%;
+}
+
+body.gender-mode-page.mode-boys {
+  background-position: 100% 0%;
+}
+
 .dark body {
   background: linear-gradient(135deg, #0d0d14 0%, #110b1a 50%, #0d1020 100%);
   color: #e2d5f0;
+  transition: background 0.5s ease;
 }
 
 .dark body.gender-girls {
@@ -32,4 +56,25 @@ body.gender-boys {
 
 .dark body.gender-boys {
   background: linear-gradient(135deg, #080d1a 0%, #0d1128 50%, #080d1a 100%);
+}
+
+.dark body.gender-mode-page {
+  background: linear-gradient(90deg,
+    #1a0812 0%, #150d18 20%, #0d0d14 50%, #0d1020 80%, #080d1a 100%
+  );
+  background-size: 300% 100%;
+  background-position: 50% 0%;
+  transition: background-position 0.8s ease;
+}
+
+.dark body.gender-mode-page.mode-girls {
+  background-position: 0% 0%;
+}
+
+.dark body.gender-mode-page.mode-both {
+  background-position: 50% 0%;
+}
+
+.dark body.gender-mode-page.mode-boys {
+  background-position: 100% 0%;
 }
