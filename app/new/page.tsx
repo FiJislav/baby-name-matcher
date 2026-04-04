@@ -140,10 +140,10 @@ export default function NewSessionPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-6">
-      <div className="max-w-md w-full flex flex-col gap-5">
+      <div className="max-w-xl w-full flex flex-col gap-5">
 
         {/* Hero header */}
-        <div className="text-center px-2">
+        <div className="text-center px-4">
           <div className="text-5xl mb-3">👶</div>
           <h1 className="text-3xl font-bold text-gray-800 dark:text-white leading-tight">
             Can&apos;t agree on a baby name?
@@ -160,8 +160,8 @@ export default function NewSessionPage() {
           </p>
         </div>
 
-        {/* Form card */}
-        <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-xl dark:shadow-none dark:border dark:border-[#352a50] p-8">
+        {/* Form card — narrower than the header */}
+        <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-xl dark:shadow-none dark:border dark:border-[#352a50] p-8 max-w-md w-full mx-auto">
         <form onSubmit={handleCreate} className="flex flex-col gap-5">
           <div>
             <label className="block text-sm font-medium text-gray-600 dark:text-[#c084fc] mb-1">Invite code</label>
