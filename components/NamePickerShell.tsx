@@ -125,12 +125,18 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
       )}
 
       {submitted ? (
-        <div className="text-center py-16 bg-white rounded-3xl shadow-sm border-2 border-green-100">
+        <div className="text-center py-14 bg-white rounded-3xl shadow-sm border-2 border-green-100">
           <div className="text-5xl mb-3">✅</div>
           <p className="text-2xl font-bold text-green-600">{gender === 'girl' ? 'Girls' : 'Boys'} list submitted!</p>
           {!allSubmitted && genderMode === 'both' && (
             <p className="text-gray-400 mt-2">Switch to {gender === 'girl' ? 'boys' : 'girls'} to finish</p>
           )}
+          <button
+            onClick={() => gender === 'girl' ? setGirlSubmitted(false) : setBoySubmitted(false)}
+            className="mt-5 text-sm text-gray-400 underline hover:text-gray-600 transition-colors"
+          >
+            ✏️ Edit my list
+          </button>
         </div>
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">

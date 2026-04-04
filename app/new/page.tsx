@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { GenderMode, Session } from '@/lib/types'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? ''
@@ -10,6 +10,134 @@ const GENDER_OPTIONS: { value: GenderMode; label: string; icon: string; desc: st
   { value: 'boys',   label: 'Boys only',   icon: '👦', desc: "We know it's a boy" },
 ]
 
+function SessionLinks({ session: initial }: { session: Session }) {
+  const [session, setSession] = useState(initial)
+  const [copiedB, setCopiedB] = useState(false)
+  const [copiedCode, setCopiedCode] = useState(false)
+
+  // Poll every 5s for submission status updates
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      const res = await fetch(`/api/sessions/${initial.id}`)
+      if (res.ok) {
+        const json = await res.json()
+        setSession(s => ({ ...s, ...json.session }))
+      }
+    }, 5000)
+    return () => clearInterval(interval)
+  }, [initial.id])
+
+  function copyB() {
+    navigator.clipboard.writeText(`${BASE_URL}/pick/${session.token_b}`)
+    setCopiedB(true)
+    setTimeout(() => setCopiedB(false), 2000)
+  }
+
+  function copyCode() {
+    navigator.clipboard.writeText(`${BASE_URL}/rejoin/${session.id}`)
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2000)
+  }
+
+  const shortCode = session.id.split('-')[0].toUpperCase()
+
+  return (
+    <main className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-blue-50 flex items-center justify-center p-6">
+      <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
+        <div className="text-5xl mb-4">🎉</div>
+        <h1 className="text-2xl font-bold text-gray-800 mb-2">Your session is ready!</h1>
+        <p className="text-gray-500 mb-6">Each of you tap your button to start picking names</p>
+
+        <div className="flex flex-col gap-3">
+          <ParentButton
+            href={`/pick/${session.token_a}`}
+            name={session.name_a}
+            submitted={session.submitted_a}
+            colorClass="from-pink-400 to-pink-500"
+            submittedClass="from-green-400 to-emerald-500"
+            icon="👩"
+          />
+
+          <ParentButton
+            href={`/pick/${session.token_b}`}
+            name={session.name_b}
+            submitted={session.submitted_b}
+            colorClass="from-blue-400 to-blue-500"
+            submittedClass="from-green-400 to-emerald-500"
+            icon="👨"
+          />
+
+          <button
+            onClick={copyB}
+            className="w-full border-2 border-blue-300 text-blue-500 font-medium py-3 rounded-2xl hover:bg-blue-50 transition-all"
+          >
+            {copiedB ? '✅ Copied!' : `📋 Copy ${session.name_b}'s link to share`}
+          </button>
+        </div>
+
+        {/* Session code */}
+        <div className="mt-6 pt-5 border-t border-gray-100">
+          <p className="text-xs text-gray-400 mb-2">Session code — save this to come back later</p>
+          <div className="flex items-center gap-2 bg-gray-50 rounded-2xl px-4 py-3">
+            <span className="font-mono text-sm font-bold text-gray-700 flex-1 text-left tracking-widest">
+              {shortCode}
+            </span>
+            <button
+              onClick={copyCode}
+              className="text-xs text-gray-400 hover:text-gray-600 transition-colors"
+            >
+              {copiedCode ? '✅ Copied' : '📋 Copy link'}
+            </button>
+          </div>
+          <a
+            href={`/rejoin/${session.id}`}
+            className="block text-xs text-pink-400 hover:text-pink-500 mt-2 transition-colors"
+          >
+            /rejoin/{shortCode}... →
+          </a>
+        </div>
+
+        <p className="text-xs text-gray-400 mt-4">
+          Tip: Copy {session.name_b}&apos;s link and send it before tapping your own button
+        </p>
+      </div>
+    </main>
+  )
+}
+
+function ParentButton({
+  href,
+  name,
+  submitted,
+  colorClass,
+  submittedClass,
+  icon,
+}: {
+  href: string
+  name: string
+  submitted: boolean
+  colorClass: string
+  submittedClass: string
+  icon: string
+}) {
+  return (
+    <a
+      href={href}
+      className={`block w-full bg-gradient-to-r ${
+        submitted ? submittedClass : colorClass
+      } text-white text-base font-semibold py-4 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all`}
+    >
+      {submitted ? (
+        <span>✅ {name} submitted — tap to edit</span>
+      ) : (
+        <span>{icon} I am {name} — Start Picking!</span>
+      )}
+    </a>
+  )
+}
+
+// ── Setup form ────────────────────────────────────────────────────────────────
+
 export default function NewSessionPage() {
   const [inviteCode, setInviteCode] = useState('')
   const [label, setLabel] = useState('')
@@ -19,7 +147,6 @@ export default function NewSessionPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [session, setSession] = useState<Session | null>(null)
-  const [copiedB, setCopiedB] = useState(false)
 
   async function handleCreate(e: React.FormEvent) {
     e.preventDefault()
@@ -36,54 +163,7 @@ export default function NewSessionPage() {
     setSession(json.session)
   }
 
-  function copyB() {
-    if (!session) return
-    navigator.clipboard.writeText(`${BASE_URL}/pick/${session.token_b}`)
-    setCopiedB(true)
-    setTimeout(() => setCopiedB(false), 2000)
-  }
-
-  const labelA = session?.name_a || nameA.trim() || 'Parent A'
-  const labelB = session?.name_b || nameB.trim() || 'Parent B'
-
-  if (session) {
-    return (
-      <main className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-blue-50 flex items-center justify-center p-6">
-        <div className="bg-white rounded-3xl shadow-xl p-8 max-w-md w-full text-center">
-          <div className="text-5xl mb-4">🎉</div>
-          <h1 className="text-2xl font-bold text-gray-800 mb-2">Your session is ready!</h1>
-          <p className="text-gray-500 mb-8">Each of you tap your button to start picking names</p>
-
-          <div className="flex flex-col gap-4">
-            <a
-              href={`/pick/${session.token_a}`}
-              className="block w-full bg-gradient-to-r from-pink-400 to-pink-500 text-white text-lg font-semibold py-4 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all"
-            >
-              👩 I am {labelA} — Start Picking!
-            </a>
-
-            <a
-              href={`/pick/${session.token_b}`}
-              className="block w-full bg-gradient-to-r from-blue-400 to-blue-500 text-white text-lg font-semibold py-4 rounded-2xl shadow-md hover:shadow-lg hover:scale-[1.02] transition-all"
-            >
-              👨 I am {labelB} — Start Picking!
-            </a>
-
-            <button
-              onClick={copyB}
-              className="w-full border-2 border-blue-300 text-blue-500 font-medium py-3 rounded-2xl hover:bg-blue-50 transition-all"
-            >
-              {copiedB ? '✅ Copied!' : `📋 Copy ${labelB}'s link to share`}
-            </button>
-          </div>
-
-          <p className="text-xs text-gray-400 mt-6">
-            Tip: Copy {labelB}&apos;s link and send it to your partner before tapping your own button
-          </p>
-        </div>
-      </main>
-    )
-  }
+  if (session) return <SessionLinks session={session} />
 
   return (
     <main className="min-h-screen bg-gradient-to-br from-pink-50 via-white to-blue-50 flex items-center justify-center p-6">
@@ -159,7 +239,9 @@ export default function NewSessionPage() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-gray-600 mb-1">Family name <span className="text-gray-400">(optional)</span></label>
+            <label className="block text-sm font-medium text-gray-600 mb-1">
+              Family name <span className="text-gray-400">(optional)</span>
+            </label>
             <input
               className="w-full border-2 border-gray-200 rounded-2xl px-4 py-3 focus:border-pink-300 focus:outline-none transition-colors"
               placeholder="e.g. Smith family"
@@ -170,7 +252,9 @@ export default function NewSessionPage() {
 
           {error && (
             <p className="text-red-500 text-sm text-center bg-red-50 py-2 rounded-xl">
-              {error === 'Invalid invite code' ? '❌ Wrong invite code — check with whoever sent you this link' : error}
+              {error === 'Invalid invite code'
+                ? '❌ Wrong invite code — check with whoever sent you this link'
+                : error}
             </p>
           )}
 

@@ -18,7 +18,7 @@ export async function POST(req: NextRequest) {
 
   const { data: session, error: sessionError } = await db
     .from('sessions')
-    .select('id, submitted_a, submitted_b, token_a, token_b')
+    .select('id, submitted_a, submitted_b, token_a, token_b, gender_mode')
     .or(`token_a.eq.${token},token_b.eq.${token}`)
     .single()
 
@@ -28,13 +28,7 @@ export async function POST(req: NextRequest) {
 
   const parent_slot = session.token_a === token ? 'a' : 'b'
 
-  if (parent_slot === 'a' && session.submitted_a) {
-    return NextResponse.json({ error: 'Already submitted' }, { status: 409 })
-  }
-  if (parent_slot === 'b' && session.submitted_b) {
-    return NextResponse.json({ error: 'Already submitted' }, { status: 409 })
-  }
-
+  // Delete existing submission for this parent+gender so they can re-submit (edit their list)
   await db
     .from('submissions')
     .delete()
@@ -60,14 +54,18 @@ export async function POST(req: NextRequest) {
     .eq('parent_slot', parent_slot)
 
   const genderSet = new Set(allSubs?.map(s => s.gender))
-  const bothGendersSubmitted = genderSet.has('girl') && genderSet.has('boy')
+  const genderMode = session.gender_mode ?? 'both'
+  const doneForMode =
+    genderMode === 'girls' ? genderSet.has('girl') :
+    genderMode === 'boys'  ? genderSet.has('boy')  :
+    genderSet.has('girl') && genderSet.has('boy')
 
-  if (bothGendersSubmitted) {
+  if (doneForMode) {
     await db
       .from('sessions')
       .update({ [`submitted_${parent_slot}`]: true })
       .eq('id', session.id)
   }
 
-  return NextResponse.json({ ok: true, bothGendersSubmitted })
+  return NextResponse.json({ ok: true, doneForMode })
 }
