@@ -96,12 +96,12 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
   return (
     <div className="min-h-screen p-4 md:p-6 max-w-5xl mx-auto">
       {/* Header */}
-      <div className="text-center mb-6">
-        <h1 className="text-3xl font-bold text-gray-800">👶 Pick Your Names</h1>
-        <p className="text-gray-400 mt-1 text-sm">Rank your top 10 — then see what you both love</p>
+      <div className="text-center mb-6 pt-8 md:pt-2">
+        <h1 className="text-3xl font-bold text-gray-800 dark:text-white">👶 Pick Your Names</h1>
+        <p className="text-gray-400 dark:text-[#7c6d9a] mt-1 text-sm">Rank your top 10 — then see what you both love</p>
       </div>
 
-      {/* Gender tabs — only shown if both genders are active */}
+      {/* Gender tabs */}
       {genderMode === 'both' && (
         <div className="flex gap-3 mb-6 justify-center">
           {(['girl', 'boy'] as const).map(g => (
@@ -112,8 +112,8 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                 gender === g
                   ? g === 'girl'
                     ? 'bg-gradient-to-r from-pink-400 to-pink-500 text-white shadow-md scale-105'
-                    : 'bg-gradient-to-r from-blue-400 to-blue-500 text-white shadow-md scale-105'
-                  : 'bg-white text-gray-500 hover:bg-gray-50 border-2 border-gray-100'
+                    : 'bg-gradient-to-r from-blue-400 to-blue-500 dark:from-[#c026d3] dark:to-[#9333ea] text-white shadow-md scale-105'
+                  : 'bg-white dark:bg-[#1a1428] text-gray-500 dark:text-[#c084fc] hover:bg-gray-50 dark:hover:bg-[#241c38] border-2 border-gray-100 dark:border-[#352a50]'
               }`}
             >
               {g === 'girl' ? '👧 Girls' : '👦 Boys'}
@@ -125,15 +125,15 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
       )}
 
       {submitted ? (
-        <div className="text-center py-14 bg-white rounded-3xl shadow-sm border-2 border-green-100">
+        <div className="text-center py-14 bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-green-100 dark:border-[#1a3a28]">
           <div className="text-5xl mb-3">✅</div>
           <p className="text-2xl font-bold text-green-600">{gender === 'girl' ? 'Girls' : 'Boys'} list submitted!</p>
           {!allSubmitted && genderMode === 'both' && (
-            <p className="text-gray-400 mt-2">Switch to {gender === 'girl' ? 'boys' : 'girls'} to finish</p>
+            <p className="text-gray-400 dark:text-[#7c6d9a] mt-2">Switch to {gender === 'girl' ? 'boys' : 'girls'} to finish</p>
           )}
           <button
             onClick={() => gender === 'girl' ? setGirlSubmitted(false) : setBoySubmitted(false)}
-            className="mt-5 text-sm text-gray-400 underline hover:text-gray-600 transition-colors"
+            className="mt-5 text-sm text-gray-400 dark:text-[#7c6d9a] underline hover:text-gray-600 dark:hover:text-[#c084fc] transition-colors"
           >
             ✏️ Edit my list
           </button>
@@ -141,11 +141,11 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* Left: Name browser */}
-          <div className="bg-white rounded-3xl shadow-sm border-2 border-pink-50 p-4">
-            <h2 className="font-bold text-gray-700 mb-3 text-sm uppercase tracking-wide">Browse Names</h2>
+          <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-pink-50 dark:border-[#352a50] p-4">
+            <h2 className="font-bold text-gray-700 dark:text-[#e2d5f0] mb-3 text-sm uppercase tracking-wide">Browse Names</h2>
             <div className="flex flex-col gap-2 mb-3">
               <input
-                className="w-full border-2 border-gray-100 rounded-2xl px-4 py-2.5 text-sm focus:border-pink-300 focus:outline-none transition-colors"
+                className="w-full border-2 border-gray-100 dark:border-[#352a50] dark:bg-[#241c38] dark:text-[#e2d5f0] dark:placeholder-[#7c6d9a] rounded-2xl px-4 py-2.5 text-sm focus:border-pink-300 dark:focus:border-purple-500 focus:outline-none transition-colors"
                 placeholder="🔍 Search names..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
@@ -157,8 +157,8 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                     onClick={() => setCountry(c.code)}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
                       country === c.code
-                        ? 'bg-gradient-to-r from-pink-400 to-blue-400 text-white shadow-sm'
-                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                        ? 'bg-gradient-to-r from-pink-400 to-blue-400 dark:from-[#c026d3] dark:to-[#9333ea] text-white shadow-sm'
+                        : 'bg-gray-100 dark:bg-[#241c38] text-gray-500 dark:text-[#c084fc] hover:bg-gray-200 dark:hover:bg-[#352a50]'
                     }`}
                   >
                     {c.label}
@@ -166,7 +166,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                 ))}
               </div>
               {country && (
-                <label className="flex items-center gap-2 text-xs text-gray-500 cursor-pointer">
+                <label className="flex items-center gap-2 text-xs text-gray-500 dark:text-[#7c6d9a] cursor-pointer">
                   <input
                     type="checkbox"
                     checked={sortByPop}
@@ -187,17 +187,19 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                 />
               ))}
               {names.length === 0 && (
-                <p className="text-center text-gray-400 py-8 text-sm">No names found</p>
+                <p className="text-center text-gray-400 dark:text-[#7c6d9a] py-8 text-sm">No names found</p>
               )}
             </div>
           </div>
 
           {/* Right: Ranked list */}
-          <div className="bg-white rounded-3xl shadow-sm border-2 border-blue-50 p-4">
+          <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-blue-50 dark:border-[#352a50] p-4">
             <div className="flex items-center justify-between mb-3">
-              <h2 className="font-bold text-gray-700 text-sm uppercase tracking-wide">Your Top 10</h2>
+              <h2 className="font-bold text-gray-700 dark:text-[#e2d5f0] text-sm uppercase tracking-wide">Your Top 10</h2>
               <span className={`text-xs font-bold px-2 py-1 rounded-full ${
-                list.length === 10 ? 'bg-green-100 text-green-600' : 'bg-gray-100 text-gray-500'
+                list.length === 10
+                  ? 'bg-green-100 dark:bg-[#1a3a28] text-green-600'
+                  : 'bg-gray-100 dark:bg-[#241c38] text-gray-500 dark:text-[#c084fc]'
               }`}>
                 {list.length}/10
               </span>
@@ -215,7 +217,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
               className={`mt-4 w-full py-4 rounded-2xl font-bold text-white text-lg shadow-md transition-all ${
                 gender === 'girl'
                   ? 'bg-gradient-to-r from-pink-400 to-pink-500 hover:shadow-lg hover:scale-[1.02]'
-                  : 'bg-gradient-to-r from-blue-400 to-blue-500 hover:shadow-lg hover:scale-[1.02]'
+                  : 'bg-gradient-to-r from-blue-400 to-blue-500 dark:from-[#c026d3] dark:to-[#9333ea] hover:shadow-lg hover:scale-[1.02]'
               } disabled:opacity-40 disabled:scale-100 disabled:cursor-not-allowed`}
             >
               {submitting ? '✨ Submitting...' : `Submit ${gender === 'girl' ? '👧 Girl' : '👦 Boy'} Names`}
@@ -225,14 +227,14 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
       )}
 
       {allSubmitted && (
-        <div className="mt-8 text-center p-8 bg-white rounded-3xl shadow-sm border-2 border-green-100">
+        <div className="mt-8 text-center p-8 bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-green-100 dark:border-[#1a3a28]">
           {partnerSubmitted ? (
             <>
               <div className="text-5xl mb-3">🎉</div>
-              <p className="text-2xl font-bold text-gray-800">Both done! Time to reveal!</p>
+              <p className="text-2xl font-bold text-gray-800 dark:text-white">Both done! Time to reveal!</p>
               <a
                 href={`/results/${sessionId}`}
-                className="mt-4 inline-block bg-gradient-to-r from-pink-400 to-blue-400 text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-md hover:shadow-lg hover:scale-[1.02] transition-all"
+                className="mt-4 inline-block bg-gradient-to-r from-pink-400 to-blue-400 dark:from-[#c026d3] dark:to-[#9333ea] text-white px-10 py-4 rounded-2xl font-bold text-lg shadow-md hover:shadow-lg hover:scale-[1.02] transition-all"
               >
                 ❤️ See Our Matches →
               </a>
@@ -240,8 +242,8 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
           ) : (
             <>
               <div className="text-4xl mb-3">⏳</div>
-              <p className="text-xl font-semibold text-gray-600">You're done!</p>
-              <p className="text-gray-400 mt-1">Waiting for your partner to finish...</p>
+              <p className="text-xl font-semibold text-gray-600 dark:text-[#e2d5f0]">You&apos;re done!</p>
+              <p className="text-gray-400 dark:text-[#7c6d9a] mt-1">Waiting for your partner to finish...</p>
             </>
           )}
         </div>

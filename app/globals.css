@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@custom-variant dark (&:is(.dark *));
 
 :root {
   --background: #fff8fb;
@@ -9,4 +10,9 @@ body {
   background: linear-gradient(135deg, #fff0f5 0%, #ffffff 50%, #eff8ff 100%);
   min-height: 100vh;
   color: var(--foreground);
+}
+
+.dark body {
+  background: linear-gradient(135deg, #0d0d14 0%, #110b1a 50%, #0d1020 100%);
+  color: #e2d5f0;
 }

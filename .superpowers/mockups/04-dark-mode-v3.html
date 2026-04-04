@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dark Mode — Higher Contrast</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #e8e8e8; padding: 32px 16px; }
+  h1 { text-align: center; font-size: 22px; color: #333; margin-bottom: 6px; }
+  .subtitle { text-align: center; color: #888; font-size: 14px; margin-bottom: 36px; }
+
+  /* ── Live demo ── */
+  .demo-wrap { max-width: 340px; margin: 0 auto 40px; }
+  .demo-label { text-align: center; font-size: 13px; font-weight: 600; color: #666; margin-bottom: 12px; }
+
+  .live-app { border-radius: 28px; overflow: hidden; box-shadow: 0 12px 48px rgba(0,0,0,0.2); }
+
+  /* app bar */
+  .app-bar { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; transition: all 0.3s; background: white; border-bottom: 1.5px solid #ffe4ef; }
+  .live-app.dark .app-bar { background: #0d0d14; border-color: #2a2040; }
+  .app-logo { font-size: 14px; font-weight: 800; color: #1a1a1a; transition: color 0.3s; }
+  .live-app.dark .app-logo { color: #ffffff; }
+
+  /* body */
+  .app-body { padding: 20px; transition: all 0.3s; background: linear-gradient(135deg, #fff0f5, #fff8ff, #eff8ff); }
+  .live-app.dark .app-body { background: linear-gradient(135deg, #0d0d14, #110b1a, #0d1020); }
+
+  /* inner card */
+  .inner { background: white; border-radius: 22px; padding: 20px; transition: all 0.3s; box-shadow: 0 2px 12px rgba(255,130,160,0.10); }
+  .live-app.dark .inner { background: #1a1428; border: 1.5px solid #352a50; box-shadow: none; }
+
+  .inner-hero { text-align: center; margin-bottom: 16px; }
+  .inner-hero .emoji { font-size: 38px; display: block; margin-bottom: 6px; }
+  .inner-hero h2 { font-size: 17px; font-weight: 800; color: #1a1a1a; transition: color 0.3s; }
+  .live-app.dark .inner-hero h2 { color: #ffffff; }
+  .inner-hero p { font-size: 11px; color: #bbb; margin-top: 2px; transition: color 0.3s; }
+  .live-app.dark .inner-hero p { color: #7c6d9a; }
+
+  /* fields */
+  .inner-field { background: #fff5f8; border: 1.5px solid #ffe4ef; border-radius: 14px; padding: 9px 13px; margin-bottom: 9px; transition: all 0.3s; }
+  .live-app.dark .inner-field { background: #241c38; border-color: #4a3870; }
+  .field-label { font-size: 9px; color: #f472b6; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; transition: color 0.3s; }
+  .live-app.dark .field-label { color: #f0abcb; }
+  .field-val { font-size: 12px; color: #555; margin-top: 2px; transition: color 0.3s; }
+  .live-app.dark .field-val { color: #e2d5f0; }
+
+  /* pills */
+  .pills { display: flex; gap: 5px; margin-bottom: 13px; }
+  .pill { flex: 1; border-radius: 20px; padding: 6px 0; font-size: 10px; font-weight: 600; text-align: center; background: #fdf2f8; color: #db2777; border: 1.5px solid #fbcfe8; transition: all 0.3s; }
+  .live-app.dark .pill { background: #241c38; color: #c084fc; border-color: #5b3d8a; }
+  .pill.on { background: linear-gradient(135deg, #f472b6, #ec4899); color: white; border-color: transparent; }
+  .live-app.dark .pill.on { background: linear-gradient(135deg, #c026d3, #9333ea); color: white; border-color: transparent; }
+
+  /* button */
+  .inner-btn { background: linear-gradient(135deg, #f472b6, #ec4899); color: white; border-radius: 16px; padding: 12px; text-align: center; font-weight: 700; font-size: 13px; transition: all 0.3s; box-shadow: 0 4px 14px rgba(236,72,153,0.3); }
+  .live-app.dark .inner-btn { background: linear-gradient(135deg, #c026d3, #9333ea); box-shadow: 0 4px 20px rgba(147,51,234,0.5); }
+
+  /* iOS toggle */
+  .ios-toggle { display: inline-flex; align-items: center; gap: 0; cursor: pointer; user-select: none; }
+  .ios-toggle .icon { font-size: 14px; transition: opacity 0.3s; }
+  .ios-toggle .icon.left { margin-right: 5px; }
+  .ios-toggle .icon.right { margin-left: 5px; }
+  .track { width: 44px; height: 26px; border-radius: 13px; background: #fbcfe8; position: relative; transition: background 0.3s; flex-shrink: 0; }
+  .live-app.dark .track { background: #9333ea; }
+  .thumb { width: 22px; height: 22px; border-radius: 50%; background: white; position: absolute; top: 2px; left: 2px; transition: left 0.25s cubic-bezier(.4,0,.2,1); box-shadow: 0 1px 6px rgba(0,0,0,0.25); }
+  .live-app.dark .thumb { left: 20px; }
+
+  /* comparison strip */
+  .compare { max-width: 700px; margin: 0 auto; }
+  .compare-title { text-align: center; font-size: 14px; color: #666; margin-bottom: 20px; font-weight: 500; }
+  .compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 560px) { .compare-grid { grid-template-columns: 1fr; } }
+  .compare-card { border-radius: 16px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.12); }
+  .compare-card .label { text-align: center; padding: 10px; font-size: 12px; font-weight: 600; }
+  .compare-card.old .label { background: #f3e8ff; color: #7c3aed; }
+  .compare-card.new .label { background: #0d0d14; color: #c084fc; }
+  .swatch-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .swatch { height: 40px; display: flex; align-items: center; justify-content: center; font-size: 9px; font-weight: 600; }
+
+  .note { text-align: center; font-size: 12px; color: #aaa; margin-top: 32px; }
+  .note strong { color: #888; }
+</style>
+</head>
+<body>
+
+<h1>🌙 Dark Mode — Higher Contrast</h1>
+<p class="subtitle">Deeper blacks, brighter white text, more vivid purple/fuchsia accents. Click the toggle to compare.</p>
+
+<div class="demo-wrap">
+  <p class="demo-label">Click the ☀️/🌙 toggle to switch</p>
+  <div class="live-app" id="app">
+    <div class="app-bar">
+      <div class="app-logo">👶 NameMatch</div>
+      <div class="ios-toggle" onclick="flip()">
+        <span class="icon left" id="sun">☀️</span>
+        <div class="track"><div class="thumb"></div></div>
+        <span class="icon right" id="moon" style="opacity:0.35">🌙</span>
+      </div>
+    </div>
+    <div class="app-body">
+      <div class="inner">
+        <div class="inner-hero">
+          <span class="emoji">💕</span>
+          <h2>Baby Name Matcher</h2>
+          <p>Find the name you both love</p>
+        </div>
+        <div class="inner-field">
+          <div class="field-label">♀ Your name</div>
+          <div class="field-val">Anna</div>
+        </div>
+        <div class="inner-field">
+          <div class="field-label">♂ Partner's name</div>
+          <div class="field-val">Martin</div>
+        </div>
+        <div class="pills">
+          <div class="pill">👧 Girls</div>
+          <div class="pill on">👶 Both</div>
+          <div class="pill">👦 Boys</div>
+        </div>
+        <div class="inner-btn">✨ Create Our Session</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Colour comparison -->
+<div class="compare">
+  <p class="compare-title">What changed vs the previous version:</p>
+  <div class="compare-grid">
+    <div class="compare-card old">
+      <div class="label">Before — too muddy</div>
+      <div class="swatch-grid">
+        <div class="swatch" style="background:#1a0a14;color:#888">bg</div>
+        <div class="swatch" style="background:#1e1225;color:#888">card</div>
+        <div class="swatch" style="background:#2d1628;color:#888">field</div>
+        <div class="swatch" style="background:#c4a0b8;color:#555">text</div>
+        <div class="swatch" style="background:#9333ea;color:white">btn</div>
+        <div class="swatch" style="background:#e879a0;color:white">label</div>
+        <div class="swatch" style="background:#3d1f35;color:#888">border</div>
+        <div class="swatch" style="background:#6b4060;color:#888">sub</div>
+      </div>
+    </div>
+    <div class="compare-card new">
+      <div class="label">Now — more contrast ✓</div>
+      <div class="swatch-grid">
+        <div class="swatch" style="background:#0d0d14;color:#555">bg</div>
+        <div class="swatch" style="background:#1a1428;color:#777">card</div>
+        <div class="swatch" style="background:#241c38;color:#999">field</div>
+        <div class="swatch" style="background:#e2d5f0;color:#333">text</div>
+        <div class="swatch" style="background:linear-gradient(135deg,#c026d3,#9333ea);color:white">btn</div>
+        <div class="swatch" style="background:#f0abcb;color:#333">label</div>
+        <div class="swatch" style="background:#352a50;color:#888">border</div>
+        <div class="swatch" style="background:#ffffff;color:#111">title</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<p class="note"><strong>Key changes:</strong> Background is near-black (#0d0d14) · Heading text is pure white · Body text is light lavender · Labels are bright pink · Button is vivid fuchsia-purple</p>
+
+<script>
+  let dark = false;
+  function flip() {
+    dark = !dark;
+    document.getElementById('app').className = 'live-app' + (dark ? ' dark' : '');
+    document.getElementById('sun').style.opacity = dark ? '0.35' : '1';
+    document.getElementById('moon').style.opacity = dark ? '1' : '0.35';
+  }
+</script>
+</body>
+</html>
