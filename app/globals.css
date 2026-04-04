@@ -10,9 +10,26 @@ body {
   background: linear-gradient(135deg, #fff0f5 0%, #ffffff 50%, #eff8ff 100%);
   min-height: 100vh;
   color: var(--foreground);
+  transition: background 0.5s ease;
+}
+
+body.gender-girls {
+  background: linear-gradient(135deg, #ffe4ef 0%, #fff0f8 50%, #ffe4ef 100%);
+}
+
+body.gender-boys {
+  background: linear-gradient(135deg, #e0f0ff 0%, #f0f4ff 50%, #dbeafe 100%);
 }
 
 .dark body {
   background: linear-gradient(135deg, #0d0d14 0%, #110b1a 50%, #0d1020 100%);
   color: #e2d5f0;
+}
+
+.dark body.gender-girls {
+  background: linear-gradient(135deg, #1a0812 0%, #200d1e 50%, #1a0812 100%);
+}
+
+.dark body.gender-boys {
+  background: linear-gradient(135deg, #080d1a 0%, #0d1128 50%, #080d1a 100%);
 }

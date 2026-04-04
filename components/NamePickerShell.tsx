@@ -42,6 +42,15 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
     genderMode === 'boys'  ? boySubmitted  :
     girlSubmitted && boySubmitted
 
+  // Tint page background based on active gender
+  useEffect(() => {
+    document.body.classList.toggle('gender-girls', gender === 'girl')
+    document.body.classList.toggle('gender-boys', gender === 'boy')
+    return () => {
+      document.body.classList.remove('gender-girls', 'gender-boys')
+    }
+  }, [gender])
+
   const fetchNames = useCallback(async () => {
     const params = new URLSearchParams({ gender })
     if (country) params.set('country', country)
@@ -142,7 +151,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
       ) : (
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
           {/* Left: Name browser */}
-          <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-pink-50 dark:border-[#352a50] p-4">
+          <div className={`bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 p-4 transition-colors duration-500 ${gender === 'girl' ? 'border-pink-100 dark:border-[#4a1a38]' : 'border-blue-100 dark:border-[#1a2a50]'}`}>
             <h2 className="font-bold text-gray-700 dark:text-[#e2d5f0] mb-3 text-sm uppercase tracking-wide">Browse Names</h2>
             <div className="flex flex-col gap-2 mb-3">
               <input
@@ -194,7 +203,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
           </div>
 
           {/* Right: Ranked list */}
-          <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 border-blue-50 dark:border-[#352a50] p-4">
+          <div className={`bg-white dark:bg-[#1a1428] rounded-3xl shadow-sm border-2 p-4 transition-colors duration-500 ${gender === 'girl' ? 'border-pink-100 dark:border-[#4a1a38]' : 'border-blue-100 dark:border-[#1a2a50]'}`}>
             <div className="flex items-center justify-between mb-3">
               <h2 className="font-bold text-gray-700 dark:text-[#e2d5f0] text-sm uppercase tracking-wide">Your Top 10</h2>
               <span className={`text-xs font-bold px-2 py-1 rounded-full ${
