@@ -140,13 +140,28 @@ export default function NewSessionPage() {
 
   return (
     <main className="min-h-screen flex items-center justify-center p-6">
-      <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-xl dark:shadow-none dark:border dark:border-[#352a50] p-8 max-w-md w-full">
-        <div className="text-center mb-8">
+      <div className="max-w-md w-full flex flex-col gap-5">
+
+        {/* Hero header */}
+        <div className="text-center px-2">
           <div className="text-5xl mb-3">👶</div>
-          <h1 className="text-3xl font-bold text-gray-800 dark:text-white">Baby Name Matcher</h1>
-          <p className="text-gray-500 dark:text-[#7c6d9a] mt-2">Find the name you both love</p>
+          <h1 className="text-3xl font-bold text-gray-800 dark:text-white leading-tight">
+            Can&apos;t agree on a baby name?
+          </h1>
+          <p className="text-gray-500 dark:text-[#7c6d9a] mt-3 text-sm leading-relaxed">
+            You&apos;re not alone. We were there too — one of us loved <em>Maximilian</em>,
+            the other wanted something that &quot;doesn&apos;t sound like a Roman emperor.&quot;
+            Three weeks of negotiations. Zero agreement.
+          </p>
+          <p className="text-gray-500 dark:text-[#7c6d9a] mt-2 text-sm leading-relaxed">
+            So I built this. Each parent ranks their top 10 names <strong className="text-gray-700 dark:text-[#e2d5f0]">independently</strong> —
+            no peeking, no influencing — and the app finds where you actually agree.
+            Science applied to parenting. You&apos;re welcome. 🧪
+          </p>
         </div>
 
+        {/* Form card */}
+        <div className="bg-white dark:bg-[#1a1428] rounded-3xl shadow-xl dark:shadow-none dark:border dark:border-[#352a50] p-8">
         <form onSubmit={handleCreate} className="flex flex-col gap-5">
           <div>
             <label className="block text-sm font-medium text-gray-600 dark:text-[#c084fc] mb-1">Invite code</label>
@@ -227,6 +242,7 @@ export default function NewSessionPage() {
         </div>
 
         <BuyMeCoffee />
+        </div>
       </div>
     </main>
   )
