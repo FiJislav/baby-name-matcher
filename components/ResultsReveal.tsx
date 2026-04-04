@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { GenderMode, MatchResults, ScoredName } from '@/lib/types'
+import { BuyMeCoffee } from '@/components/BuyMeCoffee'
 
 interface Props {
   results: MatchResults
@@ -203,6 +204,8 @@ export function ResultsReveal({ results, nameA = 'Parent A', nameB = 'Parent B',
           <NameSection title="👦 Boy Names" names={results.boys} view={view} nameA={nameA} nameB={nameB} animate={animate} />
         )}
       </div>
+
+      <BuyMeCoffee />
     </main>
   )
 }

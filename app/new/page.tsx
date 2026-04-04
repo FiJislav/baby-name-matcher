@@ -1,6 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { GenderMode, Session } from '@/lib/types'
+import { BuyMeCoffee } from '@/components/BuyMeCoffee'
 
 const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? ''
 
@@ -224,6 +225,8 @@ export default function NewSessionPage() {
           <p className="text-xs text-gray-400 dark:text-[#7c6d9a] text-center mb-3">Already have a session?</p>
           <RejoinInput />
         </div>
+
+        <BuyMeCoffee />
       </div>
     </main>
   )
