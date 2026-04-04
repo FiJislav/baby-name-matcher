@@ -33,18 +33,23 @@ export async function GET(req: NextRequest) {
 
   const namesWithPop = names.map(n => ({
     ...n,
-    popularity: (n.name_popularity as any[]).filter(
-      p => !country || p.country_code === country
-    ),
+    popularity: (n.name_popularity as any[])
+      .filter(p => !country || p.country_code === country)
+      .map(p => ({ country_code: p.country_code, rank: p.popularity_rank, year: p.year })),
   }))
 
+  // When a country is selected, only show names that have data for that country
+  const filtered = country
+    ? namesWithPop.filter(n => n.popularity.length > 0)
+    : namesWithPop
+
   if (sortByPopularity && country) {
-    namesWithPop.sort((a, b) => {
-      const rankA = a.popularity[0]?.popularity_rank ?? 9999
-      const rankB = b.popularity[0]?.popularity_rank ?? 9999
+    filtered.sort((a, b) => {
+      const rankA = a.popularity[0]?.rank ?? 9999
+      const rankB = b.popularity[0]?.rank ?? 9999
       return rankA - rankB
     })
   }
 
-  return NextResponse.json({ names: namesWithPop })
+  return NextResponse.json({ names: filtered })
 }
