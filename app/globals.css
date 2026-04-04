@@ -25,9 +25,9 @@ body.gender-boys {
 /* New session page: sliding gradient based on gender mode selection */
 body.gender-mode-page {
   background: linear-gradient(90deg,
-    #ffe4ef 0%, #fff4f9 20%, #ffffff 50%, #f0f4ff 80%, #dbeafe 100%
+    #ffb3cc 0%, #ffe8f2 25%, #e8f0ff 75%, #93c5fd 100%
   );
-  background-size: 300% 100%;
+  background-size: 200% 100%;
   background-position: 50% 0%;
   transition: background-position 0.8s ease;
 }
@@ -60,9 +60,9 @@ body.gender-mode-page.mode-boys {
 
 .dark body.gender-mode-page {
   background: linear-gradient(90deg,
-    #1a0812 0%, #150d18 20%, #0d0d14 50%, #0d1020 80%, #080d1a 100%
+    #4a0a20 0%, #200d18 25%, #0d1028 75%, #0a1a50 100%
   );
-  background-size: 300% 100%;
+  background-size: 200% 100%;
   background-position: 50% 0%;
   transition: background-position 0.8s ease;
 }
