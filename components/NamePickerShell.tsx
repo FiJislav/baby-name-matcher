@@ -194,6 +194,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                   name={n}
                   onAdd={name => addName(name)}
                   disabled={addedNames.has(n.name) || list.length >= 10}
+                  gender={gender}
                 />
               ))}
               {names.length === 0 && (
