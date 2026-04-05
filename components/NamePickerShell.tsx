@@ -2,16 +2,9 @@
 import { useCallback, useEffect, useState } from 'react'
 import { NameCard } from './NameCard'
 import { RankedList } from './RankedList'
+import { CountryFilter } from './CountryFilter'
+import { COUNTRIES } from '@/lib/countries'
 import { GenderMode, NameWithPopularity, RankedEntry } from '@/lib/types'
-
-const COUNTRIES = [
-  { code: '', label: 'All' },
-  { code: 'CZ', label: '🇨🇿 Czech' },
-  { code: 'DE', label: '🇩🇪 German' },
-  { code: 'GB', label: '🇬🇧 British' },
-  { code: 'NL', label: '🇳🇱 Dutch' },
-  { code: 'US', label: '🇺🇸 American' },
-]
 
 interface Props {
   token: string
@@ -168,21 +161,11 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                 value={search}
                 onChange={e => setSearch(e.target.value)}
               />
-              <div className="flex gap-1.5 flex-wrap">
-                {COUNTRIES.map(c => (
-                  <button
-                    key={c.code}
-                    onClick={() => setCountry(c.code)}
-                    className={`px-3 py-1 rounded-full text-xs font-medium transition-all ${
-                      country === c.code
-                        ? 'bg-gradient-to-r from-pink-400 to-blue-400 dark:from-[#c026d3] dark:to-[#9333ea] text-white shadow-sm'
-                        : 'bg-gray-100 dark:bg-[#241c38] text-gray-500 dark:text-[#c084fc] hover:bg-gray-200 dark:hover:bg-[#352a50]'
-                    }`}
-                  >
-                    {c.label}
-                  </button>
-                ))}
-              </div>
+              <CountryFilter
+                countries={COUNTRIES}
+                value={country}
+                onChange={setCountry}
+              />
               {country && (
                 <label className="flex items-center gap-2 text-xs text-gray-500 dark:text-[#7c6d9a] cursor-pointer">
                   <input
@@ -191,7 +174,7 @@ export function NamePickerShell({ token, sessionId, partnerSubmitted: initialPar
                     onChange={e => setSortByPop(e.target.checked)}
                     className="accent-pink-400"
                   />
-                  Sort by popularity in {COUNTRIES.find(c => c.code === country)?.label}
+                  Sort by popularity in {COUNTRIES.find(c => c.code === country)?.label ?? country}
                 </label>
               )}
             </div>
